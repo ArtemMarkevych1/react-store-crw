@@ -9,10 +9,6 @@
   margin: 0 7.5px 15px;
   overflow: hidden;
 
-  &.large {
-    height: 380px;
-  }
-
   &:hover {
     cursor: pointer;
 
@@ -24,6 +20,10 @@
     & .content {
       opacity: 0.9;
     }
+  }
+
+  &.large {
+    height: 380px;
   }
 
   &:first-child {

@@ -36,7 +36,7 @@ const Directory = () => {
     return <div className='directory-menu'>
         {sections.map(({title, imageUrl, size, id}) =>
             <MenuItem
-                title={title}
+                title={title.toUpperCase()}
                 imageUrl={imageUrl}
                 size={size}
                 key={id}/>
