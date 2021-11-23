@@ -7,7 +7,8 @@ const Directory = () => {
         {
             title: 'hats',
             imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
-            id: 1
+            id: 1,
+            link: 'hats'
         },
         {
             title: 'jackets',
@@ -34,12 +35,13 @@ const Directory = () => {
     ]
 
     return <div className='directory-menu'>
-        {sections.map(({title, imageUrl, size, id}) =>
+        {sections.map(({id, ...props}) =>
+        // {sections.map(...props =>
             <MenuItem
-                title={title.toUpperCase()}
-                imageUrl={imageUrl}
-                size={size}
-                key={id}/>
+                key={id}
+                // key={props.id}
+                {...props}
+            />
         )}
     </div>
 }
