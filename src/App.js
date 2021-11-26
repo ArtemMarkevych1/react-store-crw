@@ -18,11 +18,11 @@ function App() {
     }, [currentUser])
 
     return <>
-        <Header/>
+        <Header currentUser={currentUser}/>
         <Routes>
             <Route exact path="/" element={<HomePage/>}/>
             <Route path="/shop" element={<ShopPage/>}/>
-            <Route path="sign-in" element={<SignInUpPage/>}/>
+            <Route path="/sign-in" element={<SignInUpPage/>}/>
         </Routes>
     </>
 }
