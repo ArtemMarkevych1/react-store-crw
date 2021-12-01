@@ -1,30 +1,61 @@
-import React, {useEffect, useState} from 'react';
-import './App.css';
+import React, {useCallback, useEffect} from "react";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import "./App.css";
 import HomePage from "./pages/homepage/homepage.component";
-import {Route, Routes} from 'react-router-dom';
-import ShopPage from "./components/shop/shop.components";
+import ShopPage from "./pages/shop/shop.component";
+import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import Header from "./components/header/header.component";
-import SignInUpPage from "./pages/sign-in-up/sign-in-up.component";
-import {auth} from "./firebase/firebase.utils";
+import {auth, createUserProfileDocument} from "./firebase/firebase.utils";
 
-function App() {
+const App = () => {
+    const dispatch = useDispatch()
 
-    const [currentUser, setCurrentUser] = useState(null)
+    const currentUser = useSelector(state => state.user.currentUser)
+
+    const setCurrentUser = useCallback(user => {
+        dispatch(setCurrentUser(user))
+    }, [dispatch])
 
     useEffect(() => {
-        let unsubscribeFromAuth = null
-        unsubscribeFromAuth = auth.onAuthStateChanged(user => setCurrentUser(user))
-        return () => unsubscribeFromAuth()
-    }, [currentUser])
+        let unsubscribeFromAuth = null;
 
-    return <>
-        <Header currentUser={currentUser}/>
-        <Routes>
-            <Route exact path="/" element={<HomePage/>}/>
-            <Route path="/shop" element={<ShopPage/>}/>
-            <Route path="/sign-in" element={<SignInUpPage/>}/>
-        </Routes>
-    </>
+        unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+            if (userAuth) {
+                const userRef = await createUserProfileDocument(userAuth);
+
+                userRef.onSnapshot(snapShot => {
+                    setCurrentUser({
+                        id: snapShot.id,
+                        ...snapShot.data()
+                    });
+                });
+            }
+            setCurrentUser(userAuth);
+        });
+
+        return () => unsubscribeFromAuth()
+    }, [setCurrentUser])
+
+    return (
+        <>
+            <Header/>
+            <Routes>
+                <Route exact path="/" element={<HomePage/>}/>
+                <Route path="/shop" element={<ShopPage/>}/>
+                <Route
+                    exact
+                    path="/signin"
+                    render={() => currentUser ? (
+                        <Navigate to="/"/>
+                    ) : (
+                        <SignInAndSignUpPage/>
+                    )
+                    }
+                />
+            </Routes>
+        </>
+    )
 }
 
-export default App;
+export default App
