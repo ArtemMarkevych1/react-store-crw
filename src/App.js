@@ -7,13 +7,14 @@ import ShopPage from "./pages/shop/shop.component";
 import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import Header from "./components/header/header.component";
 import {auth, createUserProfileDocument} from "./firebase/firebase.utils";
+import {setCurrentUser} from "./redux/user/user.actions";
 
 const App = () => {
     const dispatch = useDispatch()
 
     const currentUser = useSelector(state => state.user.currentUser)
 
-    const setCurrentUser = useCallback(user => {
+    const onSetCurrentUser = useCallback(user => {
         dispatch(setCurrentUser(user))
     }, [dispatch])
 
@@ -25,17 +26,17 @@ const App = () => {
                 const userRef = await createUserProfileDocument(userAuth);
 
                 userRef.onSnapshot(snapShot => {
-                    setCurrentUser({
+                    onSetCurrentUser({
                         id: snapShot.id,
                         ...snapShot.data()
                     });
                 });
             }
-            setCurrentUser(userAuth);
+            onSetCurrentUser(userAuth);
         });
 
         return () => unsubscribeFromAuth()
-    }, [setCurrentUser])
+    }, [onSetCurrentUser])
 
     return (
         <>
