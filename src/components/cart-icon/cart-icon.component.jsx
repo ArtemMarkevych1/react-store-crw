@@ -3,10 +3,11 @@ import {useDispatch, useSelector} from "react-redux";
 import {toggleCartHidden} from "../../redux/cart/cart.actions";
 import {ReactComponent as ShoppingIcon} from "../../assets/shopping-bag.svg";
 import "./cart-icon.styles.scss";
+import {selectCartItemsCount} from "../../redux/cart/cart.selectors";
 
 const CartIcon = () => {
     const dispatch = useDispatch()
-    const itemsCount = useSelector(state => state.cart.cartItems.reduce((acc, value) => acc + value.quantity, 0))
+    const itemsCount = useSelector(state => selectCartItemsCount(state))
 
     const onToggleCartHidden = useCallback(() => {
         dispatch(toggleCartHidden())

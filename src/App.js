@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from "react";
-import {Navigate, Route, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import "./App.css";
 import HomePage from "./pages/homepage/homepage.component";
@@ -8,11 +8,12 @@ import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up
 import Header from "./components/header/header.component";
 import {auth, createUserProfileDocument} from "./firebase/firebase.utils";
 import {setCurrentUser} from "./redux/user/user.actions";
+import {selectCurrentUser} from "./redux/user/user.selectors";
 
 const App = () => {
     const dispatch = useDispatch()
 
-    const currentUser = useSelector(state => state.user.currentUser)
+    const currentUser = useSelector(state => selectCurrentUser(state))
 
     const onSetCurrentUser = useCallback(user => {
         dispatch(setCurrentUser(user))
@@ -46,13 +47,8 @@ const App = () => {
                 <Route path="/shop" element={<ShopPage/>}/>
                 <Route
                     exact
-                    path="/signin"
-                    render={() => currentUser ? (
-                        <Navigate to="/"/>
-                    ) : (
-                        <SignInAndSignUpPage/>
-                    )
-                    }
+                    path={currentUser ? "/" : "/signin"}
+                    element={currentUser ? <HomePage/> : <SignInAndSignUpPage/>}
                 />
             </Routes>
         </>
