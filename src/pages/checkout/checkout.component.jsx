@@ -24,7 +24,7 @@ const CheckoutPage = () => {
                     <span>Remove</span>
                 </div>
             </div>
-            {cartItems.map(cartItem => <CheckOutItem cartItem={cartItem}/>)}
+            {cartItems.map(cartItem => <CheckOutItem cartItem={cartItem} key={cartItem.id}/>)}
             <div className="total">
                 <span>
                     TOTAL: ${cartTotal}

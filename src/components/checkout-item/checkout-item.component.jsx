@@ -1,7 +1,15 @@
-import React from "react";
+import React, {useCallback} from "react";
 import "./checkout-item.styles.scss"
+import {useDispatch} from "react-redux";
+import {clearItemFromCart} from "../../redux/cart/cart.actions";
 
-const CheckOutItem = ({cartItem: {name, imageUrl, quantity, price}}) => {
+const CheckOutItem = ({cartItem}) => {
+    const dispatch = useDispatch()
+    const {name, imageUrl, quantity, price} = cartItem
+
+    const onRemove = useCallback(item => {
+        dispatch(clearItemFromCart(item))
+    }, [dispatch])
 
     return (
         <div className="checkout-item">
@@ -11,7 +19,7 @@ const CheckOutItem = ({cartItem: {name, imageUrl, quantity, price}}) => {
             <span className="name">{name}</span>
             <span className="quantity">{quantity}</span>
             <span className="price">{price}</span>
-            <div className="remove-button">&#x2715;</div>
+            <div className="remove-button" onClick={() => onRemove(cartItem)}>&#x2715;</div>
         </div>
     )
 
