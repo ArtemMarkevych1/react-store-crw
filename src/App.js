@@ -9,6 +9,7 @@ import Header from "./components/header/header.component";
 import {auth, createUserProfileDocument} from "./firebase/firebase.utils";
 import {setCurrentUser} from "./redux/user/user.actions";
 import {selectCurrentUser} from "./redux/user/user.selectors";
+import CheckoutPage from "./pages/checkout/checkout.component";
 
 const App = () => {
     const dispatch = useDispatch()
@@ -45,6 +46,7 @@ const App = () => {
             <Routes>
                 <Route exact path="/" element={<HomePage/>}/>
                 <Route path="/shop" element={<ShopPage/>}/>
+                <Route path="/checkout" element={<CheckoutPage/>}/>
                 <Route
                     exact
                     path={currentUser ? "/" : "/signin"}
